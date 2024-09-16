@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: blueviolet; 
+            margin: 20px;
+        }
+
+        #quiz-container {
+            background-color: #cfe8ff; 
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+
+        .winner {
+            color: green;
+        }
+
+        .loser {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <h1>Quiz Application</h1>
+    <div id="question-text"></div>
+    <div id="options"></div>
+    <button onclick="nextQuestion()">Next</button>
+</div>
+
+<div id="result"></div>
+
+<script>
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const questions = [
+        {
+            question: "What is the capital of France?",
+            options: ["Berlin", "Madrid", "Paris", "Rome"],
+            correct: 2
+        },
+        {
+            question: "What is 5 + 7?",
+            options: ["10", "12", "11", "14"],
+            correct: 1
+        },
+        {
+            question: "Who wrote 'Hamlet'?",
+            options: ["Charles Dickens", "William Shakespeare", "J.K. Rowling", "George Orwell"],
+            correct: 1
+        },
+        {
+            question: "Which planet is known as the Red Planet?",
+            options: ["Earth", "Saturn", "Jupiter", "Mars"],
+            correct: 3
+        },
+        {
+            question: "What is the chemical symbol for water?",
+            options: ["H2O", "CO2", "O2", "NaCl"],
+            correct: 0
+        },
+        {
+            question: "Who is the prime minister of India?",
+            options: ["Draupathi Murmu", "Rahul Gandhi", "Sonia Gandhi", "Narendra Modi"],
+            correct: 3
+        },
+        {
+            question: "What is the largest mammal?",
+            options: ["Elephant", "Blue Whale", "Giraffe", "Shark"],
+            correct: 1
+        },
+        {
+            question: "What is the hardest natural substance on Earth?",
+            options: ["Gold", "Iron", "Diamond", "Silver"],
+            correct: 2
+        },
+        {
+            question: "How many continents are there?",
+            options: ["5", "6", "7", "8"],
+            correct: 2
+        },
+        {
+            question: "What is the longest river in the world?",
+            options: ["Nile", "Amazon", "Yangtze", "Mississippi"],
+            correct: 0
+        }
+    ];
+
+    loadQuestion();
+
+
+    function loadQuestion() {
+        document.getElementById('result').innerHTML = ''; 
+        const currentQuestion = questions[currentQuestionIndex];
+        document.getElementById('question-text').innerText = currentQuestion.question;
+
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = ''; 
+        currentQuestion.options.forEach((option, index) => {
+            optionsDiv.innerHTML += `
+                <div>
+                    <input type="radio" name="option" value="${index}"> ${option}
+                </div>
+            `;
+        });
+    }
+
+    function nextQuestion() {
+        const selectedOption = document.querySelector('input[name="option"]:checked');
+
+        if (selectedOption) {
+            const selectedValue = parseInt(selectedOption.value);
+            const currentQuestion = questions[currentQuestionIndex];
+
+            if (selectedValue === currentQuestion.correct) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        } else {
+            alert("Please select an answer before moving to the next question.");
+        }
+    }
+
+    
+    function showResult() {
+        const resultDiv = document.getElementById('result');
+        const totalQuestions = questions.length;
+
+        if (score >= 7) {
+            resultDiv.innerHTML = `You scored ${score}/${totalQuestions}. Congratulations, you win! 🎉 Here's your gift: 🏆`;
+            resultDiv.classList.add("winner");
+            resultDiv.classList.remove("loser");
+        } else {
+            resultDiv.innerHTML = `You scored ${score}/${totalQuestions}. Sorry, you lose. Try again! 😢 Here's a consolation gift: 🎁`;
+            resultDiv.classList.add("loser");
+            resultDiv.classList.remove("winner");
+        }
+
+        document.getElementById('quiz-container').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
+
